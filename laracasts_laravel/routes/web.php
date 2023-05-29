@@ -1,6 +1,9 @@
 <?php
 
+
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use League\CommonMark\Extension\FrontMatter\Data\LibYamlFrontMatterParser;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +17,21 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+$document = LibYamlFrontMatterParser(
+    resource_path('posts/my-fourth-post.html')
+);
+
+dd($document);
+
+    // return view ('posts', [
+    // 'posts' => Post::all()
+    // ]);
 });
+
+Route::get('posts/{post}', function ($slug) {
+
+    return view ('post', [
+        'post' => Post::find($slug)
+        ]);
+
+})->where('post', '[A-z_\-]+');
