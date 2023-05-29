@@ -3,35 +3,24 @@
 
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
-use League\CommonMark\Extension\FrontMatter\Data\LibYamlFrontMatterParser;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
+use Illuminate\Support\Facades\File;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 
 Route::get('/', function () {
-$document = LibYamlFrontMatterParser(
-    resource_path('posts/my-fourth-post.html')
-);
-
-dd($document);
-
-    // return view ('posts', [
-    // 'posts' => Post::all()
-    // ]);
+return view ('posts', [
+    'posts' => Post::all()
+    ]);
 });
+// $document = YamlFrontMatter::parseFile(
+//     resource_path('posts/my-fourth-post.html')
+// );
 
 Route::get('posts/{post}', function ($slug) {
 
     return view ('post', [
-        'post' => Post::find($slug)
+        'post' => Post::findOrFail($slug)
         ]);
 
-})->where('post', '[A-z_\-]+');
+});
